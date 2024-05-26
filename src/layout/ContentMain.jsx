@@ -10,8 +10,9 @@ export default function ContentMain() {
     { id: '3', type: 'square', dimensions: '0.5m x 1m', width: 20, length: 40 },
     { id: '5', type: 'square', dimensions: '1m x 1m', width: 40, length: 40 },
     { id: '7', type: 'rounded triangle', dimensions: '1m x 1m', width: 40, length: 40 },
-    { id: '8', type: 'triangle1m', dimensions: '1m x 1m', width: 40, length: 40 },
-    { id: '10', type: 'triangle2m', dimensions: '1m x 2m', width: 40, length: 80 }
+    { id: '8', type: 'triangle', dimensions: '1m x 1m', width: 40, length: 40 },
+    { id: '10', type: 'triangle lift', dimensions: '1m x 2m', width: 40, length: 80 },
+    { id: '10', type: 'triangle right', dimensions: '1m x 2m', width: 40, length: 80 }
   ]);
 
   const handleDragStart = (e, module) => {
