@@ -8,7 +8,7 @@ function App() {
 
 
   return (
-    <div className='bg-pink-600 h-screen w-screen overflow-hidden'>
+    <div className='bg-pink-600 h-screen w-screen overflow-hidden flex flex-col justify-between'>
       <Header />
       <ContentMain />
       <Foot />
