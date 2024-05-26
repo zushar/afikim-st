@@ -47,8 +47,8 @@ export default function Workspace({ onDragOver }) {
     <div
       className="bg-white m-1 w-full h-full p-4 border relative"
       ref={workspaceRef}
-      onDrop={(e) => { handleDrop(e); handleDropElement(e); }}
-      onDragOver={onDragOver}
+      onDrop={(e) => { handleDropElement(e); handleDrop(e); }}
+      onDragOver={(e) => { e.preventDefault(); onDragOver(e); }}
     >
       {elements.map((el) => (
         <svg
