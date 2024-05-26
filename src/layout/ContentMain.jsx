@@ -4,7 +4,6 @@ import Workspace from '../components/Workspace';
 import List from '../components/List';
 
 export default function ContentMain() {
-  //40px is a 1m
   const [modules] = useState([
     { id: '1', type: 'square', dimensions: '1m x 2m', width: 40, length: 80 },
     { id: '2', type: 'square', dimensions: '0.5m x 2m', width: 20, length: 80 },

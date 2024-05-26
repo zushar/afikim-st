@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
 
 export default function Workspace({ onDragOver }) {
   const workspaceRef = useRef(null);
@@ -27,6 +26,7 @@ export default function Workspace({ onDragOver }) {
 
   const handleDragStartElement = (e, id) => {
     e.dataTransfer.setData("id", id);
+    console.log('drag start', id);
   };
 
   const handleDropElement = (e) => {
