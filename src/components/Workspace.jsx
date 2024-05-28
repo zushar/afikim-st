@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import Shape from './Shape';
 
 export default function Workspace({ onDragOver }) {
   const workspaceRef = useRef(null);
@@ -12,8 +13,8 @@ export default function Workspace({ onDragOver }) {
     const moduleData = JSON.parse(e.dataTransfer.getData("moduleData"));
 
     const rect = workspaceRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left - moduleData.width / 2;
-    const y = e.clientY - rect.top - moduleData.length / 2;
+    const x = e.clientX - rect.left - (moduleData.width || moduleData.radius * 2) / 2;
+    const y = e.clientY - rect.top - (moduleData.length || moduleData.radius * 2) / 2;
 
     const newElement = {
       id: Date.now(),
@@ -92,65 +93,18 @@ export default function Workspace({ onDragOver }) {
 
   return (
     <div
-      className="bg-white m-1 w-full h-full p-4 border relative"
+      className="workspace bg-white m-1 w-full h-full p-4 border relative"
       ref={workspaceRef}
       onDrop={handleDrop}
       onDragOver={(e) => { e.preventDefault(); onDragOver(e); }}
     >
       {elements.map((el) => (
-        <div
+        <Shape
           key={el.id}
-          style={{
-            position: 'absolute',
-            left: `${el.x}px`,
-            top: `${el.y}px`,
-            cursor: 'grab',
-            transform: `rotate(${el.rotation}deg)`,
-          }}
-          onMouseDown={(e) => handleMouseDown(e, el.id)}
-        >
-          <svg
-            width={el.moduleData.width}
-            height={el.moduleData.length}
-            viewBox={`0 0 ${el.moduleData.width} ${el.moduleData.length}`}
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {el.type.includes('triangle') ? (
-              <path
-                d={getTrianglePoints(el.type, el.moduleData.width, el.moduleData.length)}
-                fill="red"
-                stroke="black"
-                strokeWidth="2"
-              />
-            ) : (
-              <rect
-                width={el.moduleData.width}
-                height={el.moduleData.length}
-                fill="red"
-                stroke="black"
-                strokeWidth="2"
-              />
-            )}
-          </svg>
-          <button
-            onClick={() => handleRotateElement(el.id)}
-            style={{
-              position: 'absolute',
-              top: '0',
-              right: '0',
-              cursor: 'pointer',
-              background: 'blue',
-              color: 'white',
-              border: 'none',
-              borderRadius: '50%',
-              width: '20px',
-              height: '20px',
-              zIndex: 1,
-            }}
-          >
-            ↻
-          </button>
-        </div>
+          shape={el}
+          handleMouseDown={handleMouseDown}
+          handleRotateElement={handleRotateElement}
+        />
       ))}
       <div
         id="trash"
@@ -174,18 +128,3 @@ export default function Workspace({ onDragOver }) {
     </div>
   );
 }
-
-const getTrianglePoints = (type, width, length) => {
-  switch (type) {
-    case 'triangle':
-      return `M0,${length} L${width},0 L${width},${length} Z`;
-    case 'triangle lift':
-      return `M0,${length} L${width},${length} L${width},0 Z`;
-    case 'rounded triangle':
-      return `M0,${length} L${width},${length} L${width},0 Q0,0 0,${length} Z`;
-    case 'triangle right':
-      return `M0,0 L${width},${length} L0,${length} Z`;
-    default:
-      return '';
-  }
-};

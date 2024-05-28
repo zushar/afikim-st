@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.workspace {
+    background-image: linear-gradient(
+        to right,
+        gray 0px, 
+        transparent 1px
+        ), 
+        linear-gradient(
+            to bottom, 
+            gray 0px, 
+            transparent 1px
+            );
+    background-size: 20px 20px;
+    position: relative;
+  }
+
