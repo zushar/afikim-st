@@ -1,9 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import Shape from './Shape';
+import { AppContext } from '../context/AppContext';
 
-export default function Workspace({ onDragOver }) {
+export default function Workspace() {
+  const { handleDragOver, elements, setElements } = useContext(AppContext);
   const workspaceRef = useRef(null);
-  const [elements, setElements] = useState([]);
   const [draggingElement, setDraggingElement] = useState(null);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
@@ -96,7 +97,7 @@ export default function Workspace({ onDragOver }) {
       className="workspace bg-white m-1 w-full h-full p-4 border relative"
       ref={workspaceRef}
       onDrop={handleDrop}
-      onDragOver={(e) => { e.preventDefault(); onDragOver(e); }}
+      onDragOver={(e) => { e.preventDefault(); handleDragOver(e); }}
     >
       {elements.map((el) => (
         <Shape

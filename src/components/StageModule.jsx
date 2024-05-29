@@ -1,35 +1,24 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
+import { AppContext } from '../context/AppContext';
+import { getTrianglePoints } from '../utils/helper';
 
-const getTrianglePoints = (type, width, length) => {
-  switch (type) {
-    case 'triangle':
-      return `M0,${length} L${width},0 L${width},${length} Z`;
-      case 'rounded triangle':
-        return `M0,${length} L${width},${length} L${width},0 Q0,0 0,${length} Z`;
-    case 'triangle lift':
-      return `M0,${length} L${width},${length} L${width},0 Z`;
-    case 'triangle right':
-      return `M0,0 L${width},${length} L0,${length} Z`;
-    default:
-      return '';
-  }
-};
+const StageModule = ({ module }) => {
 
-
-const StageModule = ({ module, onDragStart }) => {
-  const { type, dimensions, width, length } = module;
   const dragImageRef = useRef(null);
+  const { handleDragStartModule } = useContext(AppContext);
+  const { type, width, length } = module;
 
-  const handleDragStart = (e) => {
+  const handleDragStartStage = (e) => {
     e.dataTransfer.setDragImage(dragImageRef.current, width / 2, length / 2);
-    onDragStart(e, module);
+    handleDragStartModule(e, module);
   };
+  
 
   return (
     <div
       draggable="true"
-      onDragStart={handleDragStart}
-      className="text-center m-1 border rounded cursor-pointer p-2 inline-block"
+      onDragStart={handleDragStartStage}
+      className="text-center m-1 cursor-pointer p-2 inline-block"
     >
       <svg
         width={width}
@@ -52,7 +41,6 @@ const StageModule = ({ module, onDragStart }) => {
           />
         )}
       </svg>
-      <div className="bg-pink-600 m-1 p1 inline-block">{dimensions}</div>
     </div>
   );
 };
