@@ -31,13 +31,13 @@ const StageModule = ({ module }) => {
         {type.includes('triangle') ? (
           <path
             d={getTrianglePoints(type, width, length)}
-            fill="red"
+            fill="#f8286e"
           />
         ) : (
           <rect
             width={width}
             height={length}
-            fill="red"
+            fill="#f8286e"
           />
         )}
       </svg>
