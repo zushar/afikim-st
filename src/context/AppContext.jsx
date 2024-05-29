@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 
 export const AppContext = createContext(null);
 
@@ -31,15 +31,25 @@ export const AppProvider = ({ children }) => {
     };
 
     const [elements, setElements] = useState([]);
+    const [selectedElement, setSelectedElement] = useState(null);
+
+    useEffect(() => {
+        setElements((prevElements) =>
+            prevElements.map((el) =>
+                el.id === selectedElement ? { ...el, fill: '#6B7280' } : { ...el, fill: 'transparent' }
+            )
+        );
+    }, [selectedElement])
 
     const glovalState = {
         modules,
         handleDragStartModule,
         handleDragOver,
         elements,
-        setElements
+        setElements,
+        selectedElement,
+        setSelectedElement
     };
-
 
     return (
         <AppContext.Provider value={glovalState}>

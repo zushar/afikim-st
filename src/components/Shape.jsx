@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { getTrianglePoints, styleForRotationButton } from '../utils/helper';
+import { AppContext } from '../context/AppContext';
 
 const Shape = ({ shape, handleMouseDown, handleRotateElement }) => {
-  const { id, type, moduleData, x, y, rotation } = shape;
+  const { id, type, moduleData, x, y, rotation, stroke, fill } = shape;
+  const { setSelectedElement} = useContext(AppContext);
 
   return (
-    <div style={{ position: 'absolute', left: `${x}px`, top: `${y}px`, transform: `rotate(${rotation}deg)` }}>
+    <div 
+      key={id}
+      style={{ position: 'absolute', left: `${x}px`, top: `${y}px`, transform: `rotate(${rotation}deg)` }}
+      onClick={() => {
+        setSelectedElement(id);
+      }}
+    >
       <svg
         key={id}
         width={moduleData.width}
@@ -20,17 +28,17 @@ const Shape = ({ shape, handleMouseDown, handleRotateElement }) => {
         {type.includes('triangle') ? (
           <path
             d={getTrianglePoints(type, moduleData.width, moduleData.length)}
-            fill="transparent"
-            stroke="black"
-            strokeWidth="3"
+            fill={fill || "transparent"}
+            stroke={stroke || 'black'}
+            strokeWidth="8"
           />
         ) : (
           <rect
             width={moduleData.width}
             height={moduleData.length}
-            fill="transparent"
-            stroke="black"
-            strokeWidth="3"
+            fill={fill || "transparent"}
+            stroke={stroke || 'black'}
+            strokeWidth="8"
           />
         )}
       </svg>

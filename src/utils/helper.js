@@ -43,7 +43,7 @@ export const styleForRotationButton = (type, centerX, centerY) => {
       return {
         position: 'absolute',
         left: `${centerX - 7}px`,
-        top: `${centerY+8}px`,
+        top: `${centerY+6}px`,
         transform: 'translate(-50%, -50%)',
         cursor: 'pointer',
         color: 'black',
