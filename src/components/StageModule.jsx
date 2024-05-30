@@ -6,7 +6,7 @@ const StageModule = ({ module }) => {
 
   const dragImageRef = useRef(null);
   const { handleDragStartModule, setColor, setSelectedElement, setHeight } = useContext(AppContext);
-  const { type, width, length } = module;
+  const { type, dimensions, width, length } = module;
 
   const handleDragStartStage = (e) => {
     e.dataTransfer.setDragImage(dragImageRef.current, width / 2, length / 2);
@@ -18,7 +18,7 @@ const StageModule = ({ module }) => {
     <div
       draggable="true"
       onDragStart={handleDragStartStage}
-      className="text-center m-1 cursor-pointer p-2 inline-block"
+      className="text-center cursor-pointer inline-block"
       onMouseDown={() => {
         setSelectedElement(null);
         setColor(null);
@@ -34,7 +34,7 @@ const StageModule = ({ module }) => {
         style={{ display: 'block', margin: '0 auto' }}
         ref={dragImageRef}
       >
-        {type.includes('משולש')  || type === 'חצי עיגול' ? (
+        {type.includes('משולש')  || type === ' חצי עיגול ' ? (
           <path
             d={getTrianglePoints(type, width, length)}
             fill="#f8286e"
@@ -47,6 +47,8 @@ const StageModule = ({ module }) => {
           />
         )}
       </svg>
+      <h1 className="text-white">{type}</h1>
+      <h1 className="text-white">{dimensions}</h1>
     </div>
   );
 };

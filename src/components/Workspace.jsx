@@ -3,10 +3,30 @@ import Shape from './Shape';
 import { AppContext } from '../context/AppContext';
 
 export default function Workspace() {
-  const { handleDragOver, elements, setElements, } = useContext(AppContext);
+  const { handleDragOver, elements, setElements } = useContext(AppContext);
   const workspaceRef = useRef(null);
   const [draggingElement, setDraggingElement] = useState(null);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+  // const [inputTop, setInputTop] = useState("");
+
+  const SNAP_DISTANCE = 10; // Distance in pixels to snap elements
+
+  const snapToGrid = (x, y, currentElement) => {
+    // Snap to other elements
+    elements.forEach(el => {
+      if (el.id !== currentElement.id) {
+        // Snap to the left or right
+        if (Math.abs(el.x - (x + currentElement.moduleData.width)) < SNAP_DISTANCE) x = el.x - currentElement.moduleData.width;
+        if (Math.abs((el.x + el.moduleData.width) - x) < SNAP_DISTANCE) x = el.x + el.moduleData.width;
+
+        // Snap to the top or bottom
+        if (Math.abs(el.y - (y + currentElement.moduleData.length)) < SNAP_DISTANCE) y = el.y - currentElement.moduleData.length;
+        if (Math.abs((el.y + el.moduleData.length) - y) < SNAP_DISTANCE) y = el.y + el.moduleData.length;
+      }
+    });
+
+    return { x, y };
+  };
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -14,8 +34,8 @@ export default function Workspace() {
     const moduleData = JSON.parse(e.dataTransfer.getData("moduleData"));
 
     const rect = workspaceRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left - (moduleData.width || moduleData.radius * 2) / 2;
-    const y = e.clientY - rect.top - (moduleData.length || moduleData.radius * 2) / 2;
+    let x = e.clientX - rect.left - (moduleData.width || moduleData.radius * 2) / 2;
+    let y = e.clientY - rect.top - (moduleData.length || moduleData.radius * 2) / 2;
 
     const newElement = {
       id: Date.now(),
@@ -25,6 +45,12 @@ export default function Workspace() {
       y,
       rotation: 0, // Initial rotation angle
     };
+
+    // Snap to grid
+    const { x: snappedX, y: snappedY } = snapToGrid(x, y, newElement);
+
+    newElement.x = snappedX;
+    newElement.y = snappedY;
 
     setElements((prevElements) => [...prevElements, newElement]);
   };
@@ -60,9 +86,24 @@ export default function Workspace() {
   };
 
   const handleMouseUp = (e) => {
-    setDraggingElement(null);
-  };
+    if (draggingElement !== null) {
+      const element = elements.find(el => el.id === draggingElement);
+      const rect = workspaceRef.current.getBoundingClientRect();
+      let x = e.clientX - rect.left - offset.x;
+      let y = e.clientY - rect.top - offset.y;
 
+      // Snap to grid
+      const { x: snappedX, y: snappedY } = snapToGrid(x, y, element);
+
+      setElements((prevElements) =>
+        prevElements.map((el) =>
+          el.id === draggingElement ? { ...el, x: snappedX, y: snappedY } : el
+        )
+      );
+
+      setDraggingElement(null);
+    }
+  };
 
   useEffect(() => {
     document.addEventListener('mousemove', handleMouseMove);
@@ -80,6 +121,9 @@ export default function Workspace() {
       onDrop={handleDrop}
       onDragOver={(e) => { e.preventDefault(); handleDragOver(e); }}
     >
+      {/* <div className=" self-center top-0 right-0 p-2">
+        <input type="text" value={inputTop} onChange={(e) => setInputTop(e.target.value)} />
+      </div> */}
       {elements.map((el) => (
         <Shape
           key={el.id}

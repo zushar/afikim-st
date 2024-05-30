@@ -44,12 +44,12 @@ const Shape = ({ shape, handleMouseDown }) => {
           cursor: 'grab',
         }}
       >
-        {type.includes('משולש') || type === 'חצי עיגול' ? (
+        {type.includes('משולש') || type === ' חצי עיגול ' ? (
           <path
             d={getTrianglePoints(type, moduleData.width, moduleData.length)}
             fill={fill || "transparent"}
             stroke={stroke || 'black'}
-            strokeWidth="8"
+            strokeWidth="5"
           />
         ) : (
           <rect
@@ -57,7 +57,7 @@ const Shape = ({ shape, handleMouseDown }) => {
             height={moduleData.length}
             fill={fill || "transparent"}
             stroke={stroke || 'black'}
-            strokeWidth="8"
+            strokeWidth="5"
           />
         )}
       </svg>

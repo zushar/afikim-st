@@ -4,12 +4,13 @@ import { AppContext } from '../context/AppContext';
 export default function List() {
   const { elements, legs } = useContext(AppContext);
 
-  // Calculate the counts of each shape type
+  // Calculate the counts of each shape type and dimensions
   const shapeCounts = elements.reduce((acc, el) => {
-    if (!acc[el.type]) {
-      acc[el.type] = 0;
+    const shapeKey = el.type + el.moduleData.dimensions;
+    if (!acc[shapeKey]) {
+      acc[shapeKey] = 0;
     }
-    acc[el.type] += 1;
+    acc[shapeKey] += 1;
     return acc;
   }, {});
 
@@ -40,10 +41,10 @@ export default function List() {
       </div>
       <div className='bg-white p-2 m-1'>
         <h1 className='text-center'>במות</h1>
-        {Object.entries(shapeCounts).map(([shape, count]) => (
-          <div key={shape} className='p-2 w-full'>
-            <div className='bg-white p-2 m-1'>
-              <p className='text-center'>{`${shape} = ${count}`}</p>
+        {Object.entries(shapeCounts).map(([shapeKey, count]) => (
+          <div key={shapeKey} className=' w-full'>
+            <div className='bg-pink-500 m-1'>
+              <p className='text-center'>{`${shapeKey} = ${count}`}</p>
             </div>
           </div>
         ))}
