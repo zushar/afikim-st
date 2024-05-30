@@ -55,10 +55,10 @@ export default function Foot() {
   return (
     <footer className='bg-blue-800 m-1 flex justify-between'>
       <button className='bg-pink-600 p-2 m-1 text-white' onClick={downloadWorkspaceImage}>
-        <h1 className='text-center'>Download Workspace Image</h1>
+        <h1 className='text-center'>הורדה של הסקיצה</h1>
       </button>
       <button className='bg-purple-600 p-2 m-1 text-white' onClick={downloadListData}>
-        <h1 className='text-center'>Download List Data</h1>
+        <h1 className='text-center'>הורדה של הנתונים</h1>
       </button>
     </footer>
   );

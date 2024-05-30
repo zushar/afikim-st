@@ -4,7 +4,7 @@ import Foot from '../layout/Foot';  // Make sure this path is correct
 import { AppContext } from '../context/AppContext';
 
 export default function Workspace() {
-  const { handleDragOver, elements, setElements, setWorkspaceRef } = useContext(AppContext);
+  const { handleDragOver, elements, setElements, setWorkspaceRef, setSelectedElement } = useContext(AppContext);
   const workspaceRef = useRef(null);
   const [draggingElement, setDraggingElement] = useState(null);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -54,6 +54,7 @@ export default function Workspace() {
     newElement.y = snappedY;
 
     setElements((prevElements) => [...prevElements, newElement]);
+    setSelectedElement(newElement.id);
   };
 
   const handleMouseDown = (e, id) => {
