@@ -1,9 +1,10 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import Shape from './Shape';
+import Foot from '../layout/Foot';  // Make sure this path is correct
 import { AppContext } from '../context/AppContext';
 
 export default function Workspace() {
-  const { handleDragOver, elements, setElements } = useContext(AppContext);
+  const { handleDragOver, elements, setElements, setWorkspaceRef } = useContext(AppContext);
   const workspaceRef = useRef(null);
   const [draggingElement, setDraggingElement] = useState(null);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -113,7 +114,7 @@ export default function Workspace() {
       document.removeEventListener('mouseup', handleMouseUp);
     };
   }, [draggingElement]);
-
+  setWorkspaceRef(workspaceRef);
   return (
     <div
       className="workspace bg-white m-1 w-full h-full p-4 border relative"
@@ -121,9 +122,6 @@ export default function Workspace() {
       onDrop={handleDrop}
       onDragOver={(e) => { e.preventDefault(); handleDragOver(e); }}
     >
-      {/* <div className=" self-center top-0 right-0 p-2">
-        <input type="text" value={inputTop} onChange={(e) => setInputTop(e.target.value)} />
-      </div> */}
       {elements.map((el) => (
         <Shape
           key={el.id}
