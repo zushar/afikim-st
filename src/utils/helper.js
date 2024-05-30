@@ -1,12 +1,12 @@
 export const getTrianglePoints = (type, width, length) => {
   switch (type) {
-    case 'triangle':
+    case 'משולש':
       return `M0,${length} L${width},0 L${width},${length} Z`;
-    case 'rounded triangle':
+    case 'חצי עיגול':
       return `M0,${length} L${width},${length} L${width},0 Q0,0 0,${length} Z`;
-    case 'triangle lift':
+    case 'משולש שמאל':
       return `M0,${length} L${width},${length} L${width},0 Z`;
-    case 'triangle right':
+    case 'משולש ימין':
       return `M0,0 L${width},${length} L0,${length} Z`;
     default:
       return '';
@@ -15,7 +15,7 @@ export const getTrianglePoints = (type, width, length) => {
 
 export const styleForRotationButton = (type, centerX, centerY) => {
   switch (type) {
-    case 'triangle':
+    case 'משולש':
       return {
         position: 'absolute',
         left: `${centerX + 7}px`,
@@ -27,7 +27,7 @@ export const styleForRotationButton = (type, centerX, centerY) => {
         background: 'none',
         border: 'none',
       };
-    case 'triangle lift':
+    case 'משולש שמאל':
       return {
         position: 'absolute',
         left: `${centerX + 7}px`,
@@ -39,7 +39,7 @@ export const styleForRotationButton = (type, centerX, centerY) => {
         background: 'none',
         border: 'none',
       };
-    case 'triangle right':
+    case 'משולש ימין':
       return {
         position: 'absolute',
         left: `${centerX - 7}px`,

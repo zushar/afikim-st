@@ -5,7 +5,7 @@ import { getTrianglePoints } from '../utils/helper';
 const StageModule = ({ module }) => {
 
   const dragImageRef = useRef(null);
-  const { handleDragStartModule } = useContext(AppContext);
+  const { handleDragStartModule, setColor, setSelectedElement, setHeight } = useContext(AppContext);
   const { type, width, length } = module;
 
   const handleDragStartStage = (e) => {
@@ -19,6 +19,12 @@ const StageModule = ({ module }) => {
       draggable="true"
       onDragStart={handleDragStartStage}
       className="text-center m-1 cursor-pointer p-2 inline-block"
+      onMouseDown={() => {
+        setSelectedElement(null);
+        setColor(null);
+        setHeight(null);
+        }
+      }
     >
       <svg
         width={width}
@@ -28,7 +34,7 @@ const StageModule = ({ module }) => {
         style={{ display: 'block', margin: '0 auto' }}
         ref={dragImageRef}
       >
-        {type.includes('triangle') ? (
+        {type.includes('משולש')  || type === 'חצי עיגול' ? (
           <path
             d={getTrianglePoints(type, width, length)}
             fill="#f8286e"

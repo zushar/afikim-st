@@ -1,21 +1,40 @@
 import React, { useContext } from 'react';
-import { getTrianglePoints, styleForRotationButton } from '../utils/helper';
+import { getTrianglePoints } from '../utils/helper';
 import { AppContext } from '../context/AppContext';
 
-const Shape = ({ shape, handleMouseDown, handleRotateElement }) => {
+const Shape = ({ shape, handleMouseDown }) => {
   const { id, type, moduleData, x, y, rotation, stroke, fill } = shape;
-  const { setSelectedElement} = useContext(AppContext);
+  const { setSelectedElement, setElements, color, setLegs, height } = useContext(AppContext);
+
+  const handleClick = () => {
+    setSelectedElement(id);
+
+    if (color || height) {
+      setElements((prevElements) =>
+        prevElements.map((el) =>
+          el.id === id ? { ...el, stroke: color } : el
+        )
+      );
+
+      setLegs((prevLegs) => {
+        const leg = prevLegs.find((leg) => leg.key === id);
+        if (leg) {
+          return prevLegs.map((leg) =>
+            leg.key === id ? { ...leg, color: color, hight: height } : leg
+          );
+        }
+        return [...prevLegs, { key: id, color: color, hight: height }];
+      });
+    }
+  };
 
   return (
-    <div 
+    <div
       key={id}
       style={{ position: 'absolute', left: `${x}px`, top: `${y}px`, transform: `rotate(${rotation}deg)` }}
-      onClick={() => {
-        setSelectedElement(id);
-      }}
+      onClick={handleClick}
     >
       <svg
-        key={id}
         width={moduleData.width}
         height={moduleData.length}
         viewBox={`0 0 ${moduleData.width} ${moduleData.length}`}
@@ -25,7 +44,7 @@ const Shape = ({ shape, handleMouseDown, handleRotateElement }) => {
           cursor: 'grab',
         }}
       >
-        {type.includes('triangle') ? (
+        {type.includes('משולש') || type === 'חצי עיגול' ? (
           <path
             d={getTrianglePoints(type, moduleData.width, moduleData.length)}
             fill={fill || "transparent"}
@@ -42,12 +61,6 @@ const Shape = ({ shape, handleMouseDown, handleRotateElement }) => {
           />
         )}
       </svg>
-      <button
-        onClick={() => handleRotateElement(id)}
-        style={styleForRotationButton(type, moduleData.width / 2, moduleData.length / 2)}
-      >
-        ↻
-      </button>
     </div>
   );
 };

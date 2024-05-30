@@ -3,7 +3,7 @@ import Shape from './Shape';
 import { AppContext } from '../context/AppContext';
 
 export default function Workspace() {
-  const { handleDragOver, elements, setElements } = useContext(AppContext);
+  const { handleDragOver, elements, setElements, } = useContext(AppContext);
   const workspaceRef = useRef(null);
   const [draggingElement, setDraggingElement] = useState(null);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -60,28 +60,9 @@ export default function Workspace() {
   };
 
   const handleMouseUp = (e) => {
-    const trashRect = document.getElementById('trash').getBoundingClientRect();
-    const elementRect = e.target.getBoundingClientRect();
-
-    if (
-      elementRect.left < trashRect.right &&
-      elementRect.right > trashRect.left &&
-      elementRect.top < trashRect.bottom &&
-      elementRect.bottom > trashRect.top
-    ) {
-      setElements((prevElements) => prevElements.filter(el => el.id !== draggingElement));
-    }
-
     setDraggingElement(null);
   };
 
-  const handleRotateElement = (id) => {
-    setElements((prevElements) =>
-      prevElements.map((el) =>
-        el.id === id ? { ...el, rotation: (el.rotation + 90) % 360 } : el
-      )
-    );
-  };
 
   useEffect(() => {
     document.addEventListener('mousemove', handleMouseMove);
@@ -104,28 +85,8 @@ export default function Workspace() {
           key={el.id}
           shape={el}
           handleMouseDown={handleMouseDown}
-          handleRotateElement={handleRotateElement}
         />
       ))}
-      <div
-        id="trash"
-        style={{
-          position: 'absolute',
-          bottom: '10px',
-          right: '10px',
-          width: '50px',
-          height: '50px',
-          backgroundColor: 'red',
-          color: 'white',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: '50%',
-          cursor: 'pointer',
-        }}
-      >
-        🗑️
-      </div>
     </div>
   );
 }
