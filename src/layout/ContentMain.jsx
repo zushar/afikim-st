@@ -7,7 +7,7 @@ export default function ContentMain() {
 
 
   return (
-    <div className='m-1 flex justify-between h-5/6'>
+    <div className=' flex justify-between h-5/6'>
       <StageSelecton />
       <Workspace />
       <List />

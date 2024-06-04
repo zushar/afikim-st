@@ -115,10 +115,14 @@ export default function Workspace() {
       document.removeEventListener('mouseup', handleMouseUp);
     };
   }, [draggingElement]);
-  setWorkspaceRef(workspaceRef);
+
+  useEffect(() => {
+    setWorkspaceRef(workspaceRef);
+  }, [setWorkspaceRef]);
+
   return (
     <div
-      className="workspace bg-white m-1 w-full h-full p-4 border relative"
+      className="workspace bg-white w-full h-full border relative"
       ref={workspaceRef}
       onDrop={handleDrop}
       onDragOver={(e) => { e.preventDefault(); handleDragOver(e); }}
