@@ -25,9 +25,9 @@ export default function List() {
   }, {});
 
   return (
-    <div className='bg-blue-800 p-2 m-1 overflow-y-scroll h-full flex flex-col'>
+    <div className='bg-blue-800 overflow-y-scroll h-full flex flex-col'>
       <div className='bg-white p-2 m-1'>
-        <h1 className='text-center'>רגליים</h1>
+        <h1 className='text-center'>כמות רגליים</h1>
         {Object.entries(legCounts).map(([key, count]) => {
           const [hight, color] = key.split('-');
           return (
@@ -40,7 +40,7 @@ export default function List() {
         })}
       </div>
       <div className='bg-white p-2 m-1'>
-        <h1 className='text-center'>במות</h1>
+        <h1 className='text-center'>כמות במות</h1>
         {Object.entries(shapeCounts).map(([shapeKey, count]) => (
           <div key={shapeKey} className=' w-full'>
             <div className='bg-pink-500 m-1'>
