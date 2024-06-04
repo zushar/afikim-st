@@ -4,30 +4,10 @@ import Foot from '../layout/Foot';  // Make sure this path is correct
 import { AppContext } from '../context/AppContext';
 
 export default function Workspace() {
-  const { handleDragOver, elements, setElements, setWorkspaceRef, setSelectedElement } = useContext(AppContext);
+  const { handleDragOver, elements, setElements, setWorkspaceRef, setSelectedElement, selectedElement } = useContext(AppContext);
   const workspaceRef = useRef(null);
   const [draggingElement, setDraggingElement] = useState(null);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
-  // const [inputTop, setInputTop] = useState("");
-
-  const SNAP_DISTANCE = 10; // Distance in pixels to snap elements
-
-  const snapToGrid = (x, y, currentElement) => {
-    // Snap to other elements
-    elements.forEach(el => {
-      if (el.id !== currentElement.id) {
-        // Snap to the left or right
-        if (Math.abs(el.x - (x + currentElement.moduleData.width)) < SNAP_DISTANCE) x = el.x - currentElement.moduleData.width;
-        if (Math.abs((el.x + el.moduleData.width) - x) < SNAP_DISTANCE) x = el.x + el.moduleData.width;
-
-        // Snap to the top or bottom
-        if (Math.abs(el.y - (y + currentElement.moduleData.length)) < SNAP_DISTANCE) y = el.y - currentElement.moduleData.length;
-        if (Math.abs((el.y + el.moduleData.length) - y) < SNAP_DISTANCE) y = el.y + el.moduleData.length;
-      }
-    });
-
-    return { x, y };
-  };
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -46,12 +26,6 @@ export default function Workspace() {
       y,
       rotation: 0, // Initial rotation angle
     };
-
-    // Snap to grid
-    const { x: snappedX, y: snappedY } = snapToGrid(x, y, newElement);
-
-    newElement.x = snappedX;
-    newElement.y = snappedY;
 
     setElements((prevElements) => [...prevElements, newElement]);
     setSelectedElement(newElement.id);
@@ -89,17 +63,13 @@ export default function Workspace() {
 
   const handleMouseUp = (e) => {
     if (draggingElement !== null) {
-      const element = elements.find(el => el.id === draggingElement);
       const rect = workspaceRef.current.getBoundingClientRect();
       let x = e.clientX - rect.left - offset.x;
       let y = e.clientY - rect.top - offset.y;
 
-      // Snap to grid
-      const { x: snappedX, y: snappedY } = snapToGrid(x, y, element);
-
       setElements((prevElements) =>
         prevElements.map((el) =>
-          el.id === draggingElement ? { ...el, x: snappedX, y: snappedY } : el
+          el.id === draggingElement ? { ...el, x: x, y: y} : el
         )
       );
 
@@ -107,14 +77,49 @@ export default function Workspace() {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (selectedElement !== null) {
+      setElements((prevElements) =>
+        prevElements.map((el) => {
+          if (el.id === selectedElement) {
+            let newX = el.x;
+            let newY = el.y;
+
+            switch (e.key) {
+              case 'ArrowUp':
+                newY = Math.max(0, el.y - 1);
+                break;
+              case 'ArrowDown':
+                newY = Math.min(workspaceRef.current.clientHeight - el.moduleData.length, el.y + 1);
+                break;
+              case 'ArrowLeft':
+                newX = Math.max(0, el.x - 1);
+                break;
+              case 'ArrowRight':
+                newX = Math.min(workspaceRef.current.clientWidth - el.moduleData.width, el.x + 1);
+                break;
+              default:
+                break;
+            }
+
+            return { ...el, x: newX, y: newY };
+          }
+          return el;
+        })
+      );
+    }
+  };
+
   useEffect(() => {
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [draggingElement]);
+  }, [draggingElement, selectedElement]);
 
   useEffect(() => {
     setWorkspaceRef(workspaceRef);
