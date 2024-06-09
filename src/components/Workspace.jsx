@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import Shape from './Shape';
-import Foot from '../layout/Foot';  // Make sure this path is correct
 import { AppContext } from '../context/AppContext';
 
 export default function Workspace() {
@@ -125,9 +124,10 @@ export default function Workspace() {
     setWorkspaceRef(workspaceRef);
   }, [setWorkspaceRef]);
 
+//bkrornd image logo 2 
   return (
     <div
-      className="workspace bg-white w-full h-full border relative"
+      className="workspace bg-white w-full h-full"
       ref={workspaceRef}
       onDrop={handleDrop}
       onDragOver={(e) => { e.preventDefault(); handleDragOver(e); }}

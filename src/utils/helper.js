@@ -11,4 +11,4 @@ export const getTrianglePoints = (type, width, length) => {
     default:
       return '';
   }
-};
+};  

@@ -35,6 +35,8 @@ export const AppProvider = ({ children }) => {
     const [legs, setLegs] = useState([]);
     const [height, setHeight] = useState(null);
     const [workspaceRef, setWorkspaceRef] = useState(null);
+    const [listRef, setListRef] = useState(null);
+    
 
     const deleteElement = () => {
         setElements((prevElements) => prevElements.filter(el => el.id !== selectedElement));
@@ -104,8 +106,8 @@ export const AppProvider = ({ children }) => {
         handleRotateElement,
         height, setHeight,
         workspaceRef, setWorkspaceRef,
-        deleteElement,
-        deleteAll
+        deleteElement, deleteAll,
+        listRef, setListRef
     };
 
     return (
